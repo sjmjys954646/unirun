@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Platform_GameManager : MonoBehaviour
 {
-    public int Score = 0;
+    public int Platform_Score = 0;
     public GameObject player;
     [SerializeField]
     private Text scoreText;
@@ -71,8 +71,8 @@ public class Platform_GameManager : MonoBehaviour
 
     public void addScore(int score)
     {
-        Score+= score;
-        scoreText.text = "Score : " + Score;
+        Platform_Score+= score;
+        scoreText.text = "Score : " + Platform_Score;
     }
 
     private void GameStart()
