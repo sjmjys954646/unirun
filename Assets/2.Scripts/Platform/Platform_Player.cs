@@ -95,6 +95,9 @@ public class Platform_Player : MonoBehaviour
         Platform_animator.SetTrigger("Die");
         Platform_isDead = true;
         Platform_rigid.velocity = Vector2.zero;
+
+
+
         //사망 소리
         //게임매니저 사망트리거
         //데이터 저장

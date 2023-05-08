@@ -13,7 +13,10 @@ public class Platform_GameManager : MonoBehaviour
     private Text guideText;
     [SerializeField]
     private bool gameStart = false;
-
+    [SerializeField]
+    private GameObject buttonBack;
+    [SerializeField]
+    private GameObject buttonRepeat;
 
     /***********************************************************************
     *                               SingleTon
@@ -85,7 +88,14 @@ public class Platform_GameManager : MonoBehaviour
     IEnumerator Wait()
     {
         yield return new WaitForSeconds(2f);
+        GameEnd();
+    }
+
+    private void GameEnd()
+    {
         Time.timeScale = 0;
+        buttonBack.SetActive(true);
+        buttonRepeat.SetActive(true);
     }
 }
 
