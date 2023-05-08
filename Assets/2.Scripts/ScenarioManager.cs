@@ -33,7 +33,6 @@ public class ScenarioManager : MonoBehaviour
         if (null == instance)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
@@ -45,16 +44,38 @@ public class ScenarioManager : MonoBehaviour
     {
         if(GameManager.Instance.firstTry)
         {
-            MoveScene(1);
+            MoveScene(2);
         }
         else
         {
-            MoveScene(0);
+            MoveScene(1);
         }
     }
 
     public void MoveScene(int index)
     {
+        if(index >= sceneName.Count)
+        {
+            Debug.Log("Not maked Yet");
+            return;
+        }
+
         SceneManager.LoadScene(sceneName[index]);
+    }
+
+    public void RestartScene()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
+    }
+
+    public void ReturnToSelectScene()
+    {
+        SceneManager.LoadScene(sceneName[1]);
+    }
+
+    public void ReturnToIntroScene()
+    {
+        SceneManager.LoadScene(sceneName[0]);
     }
 }
