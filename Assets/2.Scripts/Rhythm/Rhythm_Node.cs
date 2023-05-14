@@ -8,6 +8,7 @@ public class Rhythm_Node : MonoBehaviour
     private float deletePos = -4.3f;
 
     public bool RD_Left;
+    public bool RD_Middle = false;
 
     // Update is called once per frame
     void Update()
@@ -23,6 +24,14 @@ public class Rhythm_Node : MonoBehaviour
                 RhythmGameManager.Instance.popRightNodeQueue();
             }
 
+            RhythmGameManager.Instance.AddMissScore();
+            Destroy(gameObject);
+        }
+
+        if(RD_Middle && transform.position.x < deletePos)
+        {
+            RhythmGameManager.Instance.popMidNodeQueue();
+            RhythmGameManager.Instance.AddMissScore();
             Destroy(gameObject);
         }
     }

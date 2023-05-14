@@ -28,17 +28,10 @@ public class Rhythm_Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Jump();
+        //Jump();
         UpdateAnimate();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Enemy") && !Rhythm_isDead)
-        {
-            Die();
-        }
-    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -46,7 +39,6 @@ public class Rhythm_Player : MonoBehaviour
         {
             Rhythm_isGrounded = true;
             Rhythm_curJumpNum = 0;
-
         }
     }
 
@@ -70,20 +62,5 @@ public class Rhythm_Player : MonoBehaviour
     void UpdateAnimate()
     {
         Rhythm_animator.SetBool("Grounded", Rhythm_isGrounded);
-    }
-
-
-    void Die()
-    {
-        //사망 애니메이션
-        Rhythm_animator.SetTrigger("Die");
-        Rhythm_isDead = true;
-        Rhythm_rigid.velocity = Vector2.zero;
-
-
-
-        //사망 소리
-        //게임매니저 사망트리거
-        //데이터 저장
     }
 }

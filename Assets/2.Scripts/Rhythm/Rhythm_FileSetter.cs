@@ -94,6 +94,10 @@ public class Rhythm_FileSetter : MonoBehaviour
 
             rd_dialogue[i] = dic;
         }
+
+        //Debug.Log(rd_dialogue[0]["Left"]);
+        //Debug.Log(rd_dialogue[0]["Mid"]);
+        //Debug.Log(rd_dialogue[0]["Right"]);
     }
 
 }
