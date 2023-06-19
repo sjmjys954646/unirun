@@ -23,8 +23,6 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public bool firstTry = false;
-
     void Awake()
     {
         if (null == instance)
