@@ -129,7 +129,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: {fileID: 0}
+  deathLeft: []
   flySpeed: 12
   breakable: 0
   ishor: 0
   isver: 0
+  isLeft: 0
+  isMid: 0
+  isRight: 0

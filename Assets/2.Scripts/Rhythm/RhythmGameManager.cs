@@ -58,6 +58,10 @@ public class RhythmGameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject mouseCursor;
+    [SerializeField]
+    private AudioSource audioSource;
+    [SerializeField]
+    private GameObject particle;
 
 
     /***********************************************************************
@@ -201,7 +205,7 @@ public class RhythmGameManager : MonoBehaviour
         }
 
         StartCoroutine(FinishGame(rd_dialogue.Count * nodeInterval + 3f));
-
+        audioSource.Play();
     }
     #endregion
 
@@ -245,6 +249,7 @@ public class RhythmGameManager : MonoBehaviour
             curNode = Instantiate(NodePrefab[randObj], leftSpawnPos[randPos].transform.position, Quaternion.identity);
             curNode.GetComponent<Rhythm_Box>().setDestination(leftDestinationPos[randPos]);
             curNode.GetComponent<Rhythm_Box>().setLeftTrue();
+            curNode.GetComponent<Rhythm_Box>().particle = particle;
             if (randObj == 0)
             {
                 curNode.GetComponent<Rhythm_Box>().setHorTrue();
@@ -268,6 +273,7 @@ public class RhythmGameManager : MonoBehaviour
             curNode = Instantiate(NodePrefab[randObj], middleSpawnPos[randPos].transform.position, Quaternion.identity);
             curNode.GetComponent<Rhythm_Box>().setDestination(middleDestinationPos[randPos]);
             curNode.GetComponent<Rhythm_Box>().setMidTrue();
+            curNode.GetComponent<Rhythm_Box>().particle = particle;
 
             if (randObj == 0)
             {
@@ -292,6 +298,7 @@ public class RhythmGameManager : MonoBehaviour
             curNode = Instantiate(NodePrefab[randObj], rightSpawnPos[randPos].transform.position, Quaternion.identity);
             curNode.GetComponent<Rhythm_Box>().setDestination(rightDestinationPos[randPos]);
             curNode.GetComponent<Rhythm_Box>().setRightTrue();
+            curNode.GetComponent<Rhythm_Box>().particle = particle;
 
             if (randObj == 0)
             {
@@ -339,6 +346,7 @@ public class RhythmGameManager : MonoBehaviour
 
     private void EndGaae()
     {
+        audioSource.Stop();
         ResultUI.SetActive(true);
         ResultUI.transform.GetChild(0).GetComponent<Text>().text = "Cool : " + coolNum;
         ResultUI.transform.GetChild(1).GetComponent<Text>().text = "Good : " + goodNum;

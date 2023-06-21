@@ -127,6 +127,7 @@ public class Rhythm_Mousecursor : MonoBehaviour
                 {
                     cutHubo = rhythmGameManager.popLeftNodeQueue();
                     judgePosition(cutHubo, uiPos(cutHubo));
+                    cutHubo.GetComponent<Rhythm_Box>().makeParticle();
                     Destroy(cutHubo);
                 }
 
@@ -146,6 +147,7 @@ public class Rhythm_Mousecursor : MonoBehaviour
                 {
                     cutHubo = rhythmGameManager.popMidNodeQueue();
                     judgePosition(cutHubo, uiPos(cutHubo));
+                    cutHubo.GetComponent<Rhythm_Box>().makeParticle();
                     Destroy(cutHubo);
                 }
             }
@@ -164,6 +166,7 @@ public class Rhythm_Mousecursor : MonoBehaviour
                 {
                     cutHubo = rhythmGameManager.popRightNodeQueue();
                     judgePosition(cutHubo, uiPos(cutHubo));
+                    cutHubo.GetComponent<Rhythm_Box>().makeParticle();
                     Destroy(cutHubo);
                 }
 

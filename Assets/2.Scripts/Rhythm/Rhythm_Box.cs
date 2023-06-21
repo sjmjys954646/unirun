@@ -6,6 +6,8 @@ using TMPro;
 public class Rhythm_Box : MonoBehaviour
 {
     public GameObject destination;
+    public GameObject deathLeft;
+    public GameObject particle;
 
     [SerializeField]
     private float flySpeed;
@@ -42,8 +44,14 @@ public class Rhythm_Box : MonoBehaviour
             }
             RhythmGameManager.Instance.AddMissScore();
             RhythmGameManager.Instance.sendMissCoroutine(uiPos(gameObject));
+            makeParticle();
             Destroy(gameObject);
         }
+    }
+
+    public void makeParticle()
+    {
+        Instantiate(particle, transform.position, transform.rotation);
     }
 
     private int uiPos(GameObject go)
