@@ -73,6 +73,7 @@ public class CharacterMainController : MonoBehaviour
         public string paramDistY = "Dist Y";
         public string paramGrounded = "Grounded";
         public string paramJump = "Jump";
+        public string paramReload = "Reload";
     }
     [Serializable]
     public class CharacterState
@@ -117,7 +118,7 @@ public class CharacterMainController : MonoBehaviour
     private float _moveX;
     private float _moveZ;
 
-
+    GameObject gun;
     #endregion
 
     /***********************************************************************
@@ -128,6 +129,9 @@ public class CharacterMainController : MonoBehaviour
     {
         InitComponents();
         InitSettings();
+        gun = GameObject.Find("gun");
+        
+
     }
 
     #endregion
