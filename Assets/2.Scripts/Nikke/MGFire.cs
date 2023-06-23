@@ -17,7 +17,7 @@ public class MGFire : MonoBehaviour
 
     public ParticleSystem muzzleFlash;
     public ParticleSystem shellEject;
-    //public GameObject impact;
+    public GameObject impact;
 
     Camera camera;
     bool isFiring;
@@ -106,7 +106,7 @@ public class MGFire : MonoBehaviour
             Debug.Log("hit");
 
             //Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
-            /*IDamageable target =
+            IDamageable target =
                hit.collider.GetComponent<IDamageable>();
 
             // 상대방으로 부터 IDamageable 오브젝트를 가져오는데 성공했다면
@@ -115,8 +115,9 @@ public class MGFire : MonoBehaviour
                 // 상대방의 OnDamage 함수를 실행시켜서 상대방에게 데미지 주기
                 target.OnDamage(damage, hit.point, hit.normal);
             }
-            */
+            
             hitPosition = hit.point;
+            GameObject impactGO = Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
         }
         else
         {
