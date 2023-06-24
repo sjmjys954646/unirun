@@ -81,7 +81,7 @@ public class PlayerHealth : LivingEntity {
         //playerMovement.enabled = false;
         //playerShooter.enabled = false;
     }
-    /*
+    
     private void OnTriggerEnter(Collider other) {
         // 아이템과 충돌한 경우 해당 아이템을 사용하는 처리
         // 사망하지 않은 경우에만 아이템 사용가능
@@ -89,7 +89,7 @@ public class PlayerHealth : LivingEntity {
         {
             // 충돌한 상대방으로 부터 Item 컴포넌트를 가져오기 시도
             IItem item = other.GetComponent<IItem>();
-
+            //Debug.Log("ammo get");
             // 충돌한 상대방으로부터 Item 컴포넌트가 가져오는데 성공했다면
             if (item != null)
             {
@@ -99,5 +99,5 @@ public class PlayerHealth : LivingEntity {
                 playerAudioPlayer.PlayOneShot(itemPickupClip);
             }
         }
-    }*/
+    }
 }

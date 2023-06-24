@@ -29,12 +29,12 @@ public class MGFire : MonoBehaviour
 
     public float damage = 25; // 공격력
 
-    public int ammoRemain = 100; // 남은 전체 탄약
-    public int magCapacity = 25; // 탄창 용량
+    public int ammoRemain = 1000; // 남은 전체 탄약
+    public int magCapacity = 100; // 탄창 용량
     public int magAmmo; // 현재 탄창에 남아있는 탄약
 
-    public float timeBetFire = 0.12f; // 총알 발사 간격
-    public float reloadTime = 1.8f; // 재장전 소요 시간
+    public float timeBetFire = 0.1f; // 총알 발사 간격
+    public float reloadTime = 3.6f; // 재장전 소요 시간
     private float lastFireTime; // 총을 마지막으로 발사한 시점
 
     private Vector3 gunDefaultPos;
@@ -172,7 +172,7 @@ public class MGFire : MonoBehaviour
 
         // 재장전 소요 시간 만큼 처리를 쉬기
         yield return new WaitForSeconds(reloadTime);
-
+        gunAudioPlayer.PlayOneShot(reloadClip);
         // 탄창에 채울 탄약을 계산한다
         int ammoToFill = magCapacity - magAmmo;
 
@@ -217,7 +217,7 @@ public class MGFire : MonoBehaviour
             currentGun.transform.Translate(Vector3.right * 0.05f);   //반동으로 0.3만큼 뒤로 밀린다.
 
             //반동 초기화 과정 코루틴에서
-            currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, gunDefaultPos, Time.deltaTime * 70f);    //총기의 위치를 Lerp로 천천히 되돌린다.
+            currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, gunDefaultPos, Time.deltaTime * 60f);    //총기의 위치를 Lerp로 천천히 되돌린다.
 
 
             if (Vector3.Distance(currentGun.transform.localPosition, gunDefaultPos) < 0.01f) //총이 거의 제자리로 돌아왔다면
