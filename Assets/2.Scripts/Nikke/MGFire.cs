@@ -11,15 +11,15 @@ public class MGFire : MonoBehaviour
         Reloading // 재장전 중
     }
     public State state { get; private set; } // 현재 총의 상태
-    // Start is called before the first frame update
-    //public Transform spawnPoint;
-    public float distance = 15f;
+    public float distance = 100f;
+
+    public GameObject currentGun;
 
     public ParticleSystem muzzleFlash;
     public ParticleSystem shellEject;
     public GameObject impact;
 
-    Camera camera;
+    public new Camera camera;
     bool isFiring;
     public float rateOffire = 0.1f;
 
@@ -37,6 +37,12 @@ public class MGFire : MonoBehaviour
     public float reloadTime = 1.8f; // 재장전 소요 시간
     private float lastFireTime; // 총을 마지막으로 발사한 시점
 
+    private Vector3 gunDefaultPos;
+    //public float recoilForce;
+    //public float recoilAngle;
+    //public float recoilDuration;
+    //private Quaternion originalCameraRotation;
+    private bool isRebound = false;
 
     private void Awake()
     {
@@ -57,6 +63,7 @@ public class MGFire : MonoBehaviour
     void Start()
     {
         camera = Camera.main;
+        gunDefaultPos = currentGun.transform.localPosition;
     }
 
     // Update is called once per frame
@@ -69,15 +76,6 @@ public class MGFire : MonoBehaviour
 
         if (isFiring)
         {
-            /*
-            shotCounter -= Time.deltaTime;
-
-            if (shotCounter <= 0)
-            {
-                shotCounter = rateOffire;
-                Shoot();
-            }
-            */
             if (state == State.Ready
             && Time.time >= lastFireTime + timeBetFire)
             {
@@ -85,8 +83,7 @@ public class MGFire : MonoBehaviour
                 lastFireTime = Time.time;
                 // 실제 발사 처리 실행
                 Shoot();
-
-
+                
             }
         }
         if (state == State.Empty || Input.GetKeyDown(KeyCode.R))
@@ -98,7 +95,7 @@ public class MGFire : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 hitPosition = Vector3.zero;
-
+        StartCoroutine(Rebound());
 
 
         if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, distance))
@@ -116,14 +113,14 @@ public class MGFire : MonoBehaviour
                 target.OnDamage(damage, hit.point, hit.normal);
             }
             
-            hitPosition = hit.point;
-            GameObject impactGO = Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
         }
         else
         {
             Debug.Log("Not hit");
         }
-
+        
+        hitPosition = hit.point;
+        GameObject impactGO = Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
         StartCoroutine(ShotEffect());
 
         //StopAllCoroutines();
@@ -193,6 +190,45 @@ public class MGFire : MonoBehaviour
 
         // 총의 현재 상태를 발사 준비된 상태로 변경
         state = State.Ready;
+    }
+    /*private IEnumerator ApplyRecoil()
+    {
+        // 총 반동 애니메이션 재생
+        float elapsedTime = 0f;
+        while (elapsedTime < recoilDuration)
+        {
+            float progress = elapsedTime / recoilDuration;
+            float recoilAngleThisFrame = Mathf.Lerp(0f, recoilAngle, progress);
+            camera.transform.localRotation = originalCameraRotation * Quaternion.Euler(-recoilAngleThisFrame, 0f, 0f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 총 위치 재설정
+        transform.localPosition = Vector3.zero;
+        camera.transform.localRotation = originalCameraRotation;
+    }*/
+
+    private IEnumerator Rebound()
+    {
+        isRebound = true;
+        while (isRebound) {
+            currentGun.transform.localPosition = gunDefaultPos;   //이전 반동의 영향을 받고 있어도 총기 반동 연출을 다시 시작한다.
+            currentGun.transform.Translate(Vector3.right * 0.05f);   //반동으로 0.3만큼 뒤로 밀린다.
+
+            //반동 초기화 과정 코루틴에서
+            currentGun.transform.localPosition = Vector3.Lerp(currentGun.transform.localPosition, gunDefaultPos, Time.deltaTime * 70f);    //총기의 위치를 Lerp로 천천히 되돌린다.
+
+
+            if (Vector3.Distance(currentGun.transform.localPosition, gunDefaultPos) < 0.01f) //총이 거의 제자리로 돌아왔다면
+            {
+                currentGun.transform.localPosition = gunDefaultPos;
+                isRebound = false;      //모든 반동의 영향을 초기화 시키고 코루틴의 종료를 알리고 코루틴을 종료한다.
+                break;
+            }
+            yield return null;
+        }
+        
     }
 }
 

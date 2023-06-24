@@ -67,7 +67,7 @@ public class Enemy : LivingEntity {
 
     private void Update() {
         // 추적 대상의 존재 여부에 따라 다른 애니메이션을 재생
-        enemyAnimator.SetBool("HasTarget", hasTarget);
+        //enemyAnimator.SetBool("HasTarget", hasTarget);
     }
 
     // 주기적으로 추적할 대상의 위치를 찾아 경로를 갱신
@@ -130,6 +130,7 @@ public class Enemy : LivingEntity {
 
             // 피격 효과음 재생
             enemyAudioPlayer.PlayOneShot(hitSound);
+            Debug.Log("enemy damaged");
         }
 
         // LivingEntity의 OnDamage()를 실행하여 데미지 적용
@@ -166,7 +167,8 @@ public class Enemy : LivingEntity {
             // 상대방으로부터 LivingEntity 타입을 가져오기 시도
             LivingEntity attackTarget
                 = other.GetComponent<LivingEntity>();
-
+            Debug.Log(attackTarget);
+            Debug.Log(targetEntity);
             // 상대방의 LivingEntity가 자신의 추적 대상이라면 공격 실행
             if (attackTarget != null && attackTarget == targetEntity)
             {
@@ -178,7 +180,7 @@ public class Enemy : LivingEntity {
                     = other.ClosestPoint(transform.position);
                 Vector3 hitNormal
                     = transform.position - other.transform.position;
-
+                Debug.Log("attack_to_player");
                 // 공격 실행
                 attackTarget.OnDamage(damage, hitPoint, hitNormal);
             }
