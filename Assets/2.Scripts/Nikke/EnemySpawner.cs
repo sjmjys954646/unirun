@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour {
     // 웨이브 정보를 UI로 표시
     private void UpdateUI() {
         // 현재 웨이브와 남은 적의 수 표시
-        //UIManager.instance.UpdateWaveText(wave, enemies.Count);
+        UIManager.instance.UpdateWaveText(wave, enemies.Count);
     }
 
     // 현재 웨이브에 맞춰 적을 생성
@@ -73,6 +73,6 @@ public class EnemySpawner : MonoBehaviour {
 
         enemy.onDeath += () => enemies.Remove(enemy);
         enemy.onDeath += () => Destroy(enemy.gameObject, 10f);
-        //enemy.onDeath += () => NK_GameManager.instance.AddScore(100);
+        enemy.onDeath += () => NK_GameManager.instance.AddScore(100);
     }
 }

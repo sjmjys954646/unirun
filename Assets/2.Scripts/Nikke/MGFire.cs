@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MGFire : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class MGFire : MonoBehaviour
     public float distance = 100f;
 
     public GameObject currentGun;
+    public Text ammoText;
 
     public ParticleSystem muzzleFlash;
     public ParticleSystem shellEject;
@@ -38,16 +40,13 @@ public class MGFire : MonoBehaviour
     private float lastFireTime; // 총을 마지막으로 발사한 시점
 
     private Vector3 gunDefaultPos;
-    //public float recoilForce;
-    //public float recoilAngle;
-    //public float recoilDuration;
-    //private Quaternion originalCameraRotation;
     private bool isRebound = false;
 
     private void Awake()
     {
         // 사용할 컴포넌트들의 참조를 가져오기
         gunAudioPlayer = GetComponent<AudioSource>();
+        
     }
     private void OnEnable()
     {
@@ -57,6 +56,7 @@ public class MGFire : MonoBehaviour
         state = State.Ready;
         // 마지막으로 총을 쏜 시점을 초기화
         lastFireTime = 0;
+        
     }
 
 
@@ -64,6 +64,7 @@ public class MGFire : MonoBehaviour
     {
         camera = Camera.main;
         gunDefaultPos = currentGun.transform.localPosition;
+        //ammoText = GetComponent<UIManager>().ammoText;
     }
 
     // Update is called once per frame
@@ -126,6 +127,7 @@ public class MGFire : MonoBehaviour
         //StopAllCoroutines();
 
         magAmmo--;
+        ammoText.text = magAmmo + "/" + ammoRemain;
         if (magAmmo <= 0)
         {
             // 탄창에 남은 탄약이 없다면, 총의 현재 상태를 Empty으로 갱신
@@ -190,24 +192,8 @@ public class MGFire : MonoBehaviour
 
         // 총의 현재 상태를 발사 준비된 상태로 변경
         state = State.Ready;
+        ammoText.text = magAmmo + "/" + ammoRemain;
     }
-    /*private IEnumerator ApplyRecoil()
-    {
-        // 총 반동 애니메이션 재생
-        float elapsedTime = 0f;
-        while (elapsedTime < recoilDuration)
-        {
-            float progress = elapsedTime / recoilDuration;
-            float recoilAngleThisFrame = Mathf.Lerp(0f, recoilAngle, progress);
-            camera.transform.localRotation = originalCameraRotation * Quaternion.Euler(-recoilAngleThisFrame, 0f, 0f);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // 총 위치 재설정
-        transform.localPosition = Vector3.zero;
-        camera.transform.localRotation = originalCameraRotation;
-    }*/
 
     private IEnumerator Rebound()
     {

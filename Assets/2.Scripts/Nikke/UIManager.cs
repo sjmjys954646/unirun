@@ -27,6 +27,8 @@ public class UIManager : MonoBehaviour {
 
     // 탄약 텍스트 갱신
     public void UpdateAmmoText(int magAmmo, int remainAmmo) {
+        //magAmmo = GetComponent<MGFire>().magAmmo;
+        //remainAmmo = GetComponent<MGFire>().ammoRemain; 
         ammoText.text = magAmmo + "/" + remainAmmo;
     }
 
