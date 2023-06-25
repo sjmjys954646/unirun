@@ -5,8 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Dead
+<<<<<<< HEAD
   - gun
   - Enemy
+=======
+  - BreakPoint
+  - CrackPoint
+>>>>>>> develop
   layers:
   - Default
   - TransparentFX

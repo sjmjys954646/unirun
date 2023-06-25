@@ -31,7 +31,7 @@ public class Rhythm_InputManager : MonoBehaviour
     private void InputProcessing()
     {
         GameObject pressedGameObject;
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.A))
         {
             pressedGameObject = rhythmGameManager.popLeftNodeQueue();
 
@@ -51,7 +51,7 @@ public class Rhythm_InputManager : MonoBehaviour
             judgePosition(pressedGameObject);
             Destroy(pressedGameObject);
         }
-        else if (Input.GetKeyDown(KeyCode.RightShift))
+        else if (Input.GetKeyDown(KeyCode.D))
         {
             pressedGameObject = rhythmGameManager.popRightNodeQueue();
 

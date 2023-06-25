@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class RhythmGameManager : MonoBehaviour
 {
+    public bool isRhythmGameStart = false;
+
     [SerializeField]
     private int coolNum = 0;
     [SerializeField]
     private int goodNum = 0;
+    [SerializeField]
+    private int badNum = 0;
     [SerializeField]
     private int missNum = 0;
 
@@ -18,11 +22,22 @@ public class RhythmGameManager : MonoBehaviour
     private GameObject ResultUI;
 
     [SerializeField]
-    private GameObject leftSpawnPos;
+    private GameObject spawnPos;
     [SerializeField]
-    private GameObject middleSpawnPos;
+    private List<GameObject> leftSpawnPos = new List<GameObject>();
     [SerializeField]
-    private GameObject rightSpawnPos;
+    private List<GameObject> middleSpawnPos = new List<GameObject>();
+    [SerializeField]
+    private List<GameObject> rightSpawnPos = new List<GameObject>();
+    [SerializeField]
+    private GameObject destinationPos;
+    [SerializeField]
+    private List<GameObject> leftDestinationPos = new List<GameObject>();
+    [SerializeField]
+    private List<GameObject> middleDestinationPos = new List<GameObject>();
+    [SerializeField]
+    private List<GameObject> rightDestinationPos = new List<GameObject>();
+
 
     [SerializeField]
     private GameObject leftSpawnGroup;
@@ -32,9 +47,7 @@ public class RhythmGameManager : MonoBehaviour
     private GameObject rightSpawnGroup;
 
     [SerializeField]
-    private GameObject NodePrefab;
-    [SerializeField]
-    private GameObject NodePrefabMid;
+    private List<GameObject> NodePrefab = new List<GameObject>();
 
     [SerializeField]
     private float nodeInterval;
@@ -42,6 +55,13 @@ public class RhythmGameManager : MonoBehaviour
     private Queue<GameObject> leftNodeQueue;
     private Queue<GameObject> midNodeQueue;
     private Queue<GameObject> rightNodeQueue;
+
+    [SerializeField]
+    private GameObject mouseCursor;
+    [SerializeField]
+    private AudioSource audioSource;
+    [SerializeField]
+    private GameObject particle;
 
 
     /***********************************************************************
@@ -81,13 +101,45 @@ public class RhythmGameManager : MonoBehaviour
 
     private void Start()
     {
-        StartGame();
+        Time.timeScale = 0;
+        StartCoroutine(StartGame(2f));
     }
+
 
     /***********************************************************************
     *                               public
     ***********************************************************************/
     #region .
+
+    public bool isLeftNodeQueueEmpty()
+    {
+        return leftNodeQueue.Count == 0;
+    }
+
+    public bool isMidNodeQueueEmpty()
+    {
+        return midNodeQueue.Count == 0;
+    }
+
+    public bool isRightNodeQueueEmpty()
+    {
+        return rightNodeQueue.Count == 0;
+    }
+
+    public GameObject showLeftNodeQueue()
+    {
+        return leftNodeQueue.Peek();
+    }
+
+    public GameObject showMidNodeQueue()
+    {
+        return midNodeQueue.Peek();
+    }
+
+    public GameObject showRightNodeQueue()
+    {
+        return rightNodeQueue.Peek();
+    }
 
     public GameObject popLeftNodeQueue()
     {
@@ -123,19 +175,23 @@ public class RhythmGameManager : MonoBehaviour
         goodNum+=1;
     }
 
+    public void AddBadScore()
+    {
+        badNum += 1;
+    }
+
     public void AddMissScore()
     {
         missNum+=1;
     }
 
-    #endregion
 
     public void StartGame()
     {
-        //°ÔÀÓ½ÃÀÛ
+        //ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½
         List<Dictionary<string, int>> rd_dialogue = fileSetter.GetComponent<Rhythm_FileSetter>().rd_dialogue;
         string[] arr = new string[] {"Left", "Mid", "Right" };
-        //ÄÚ·çÆ¾À¸·Î »ý¼ºÇØ¾ßµÊ
+        //ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ßµï¿½
         for(int i = 0;i <  rd_dialogue.Count;i++)
         {
             for(int j = 0;j < 3 ;j++)
@@ -149,7 +205,32 @@ public class RhythmGameManager : MonoBehaviour
         }
 
         StartCoroutine(FinishGame(rd_dialogue.Count * nodeInterval + 3f));
-        
+        audioSource.Play();
+    }
+    #endregion
+
+    private void allocateSpawnList()
+    {
+        for(int i = 0;i < spawnPos.transform.childCount ;i++)
+        {
+            if(i%3 == 0)
+            {
+                rightSpawnPos.Add(spawnPos.transform.GetChild(i).gameObject);
+                rightDestinationPos.Add(destinationPos.transform.GetChild(i).gameObject);
+            }
+            else if(i%3 == 1)
+            {
+                middleSpawnPos.Add(spawnPos.transform.GetChild(i).gameObject);
+                middleDestinationPos.Add(destinationPos.transform.GetChild(i).gameObject);
+            }
+            else if(i%3 == 2)
+            {
+                leftSpawnPos.Add(spawnPos.transform.GetChild(i).gameObject);
+                leftDestinationPos.Add(destinationPos.transform.GetChild(i).gameObject);
+            }
+        }
+
+
     }
 
     private void InstantiateNode(int pos)
@@ -160,27 +241,95 @@ public class RhythmGameManager : MonoBehaviour
 
         GameObject curNode;
 
+        int randPos = Random.Range(0, 3);
+        int randObj = Random.Range(0, 3);
+
         if (pos == 0)
         {
-            curNode = Instantiate(NodePrefab, leftSpawnPos.transform.position, Quaternion.identity);
-            curNode.GetComponent<Rhythm_Node>().RD_Left = true;
+            curNode = Instantiate(NodePrefab[randObj], leftSpawnPos[randPos].transform.position, Quaternion.identity);
+            curNode.GetComponent<Rhythm_Box>().setDestination(leftDestinationPos[randPos]);
+            curNode.GetComponent<Rhythm_Box>().setLeftTrue();
+            curNode.GetComponent<Rhythm_Box>().particle = particle;
+            if (randObj == 0)
+            {
+                curNode.GetComponent<Rhythm_Box>().setHorTrue();
+                curNode.GetComponent<Rhythm_Box>().setVerTrue();
+            }
+            else if(randObj == 1)
+            {
+                curNode.GetComponent<Rhythm_Box>().setHorTrue();
+                curNode.transform.rotation = Quaternion.Euler(0, 0, 90);
+            }
+            else if(randObj == 2)
+            {
+                curNode.GetComponent<Rhythm_Box>().setVerTrue();
+            }
+
             curNode.transform.parent = leftSpawnGroup.transform;
             leftNodeQueue.Enqueue(curNode);
         }
         else if(pos == 1)
         {
-            curNode = Instantiate(NodePrefabMid, middleSpawnPos.transform.position, Quaternion.identity);
-            curNode.GetComponent<Rhythm_Node>().RD_Middle = true;
-            curNode.transform.parent = middleSpawnPos.transform;
+            curNode = Instantiate(NodePrefab[randObj], middleSpawnPos[randPos].transform.position, Quaternion.identity);
+            curNode.GetComponent<Rhythm_Box>().setDestination(middleDestinationPos[randPos]);
+            curNode.GetComponent<Rhythm_Box>().setMidTrue();
+            curNode.GetComponent<Rhythm_Box>().particle = particle;
+
+            if (randObj == 0)
+            {
+                curNode.GetComponent<Rhythm_Box>().setHorTrue();
+                curNode.GetComponent<Rhythm_Box>().setVerTrue();
+            }
+            else if (randObj == 1)
+            {
+                curNode.GetComponent<Rhythm_Box>().setHorTrue();
+                curNode.transform.rotation = Quaternion.Euler(0, 0, 90);
+            }
+            else if (randObj == 2)
+            {
+                curNode.GetComponent<Rhythm_Box>().setVerTrue();
+            }
+
+            curNode.transform.parent = middleSpawnGroup.transform;
             midNodeQueue.Enqueue(curNode);
         }
         else if(pos == 2)
         {
-            curNode = Instantiate(NodePrefab, rightSpawnPos.transform.position, Quaternion.identity);
-            curNode.GetComponent<Rhythm_Node>().RD_Left = false;
+            curNode = Instantiate(NodePrefab[randObj], rightSpawnPos[randPos].transform.position, Quaternion.identity);
+            curNode.GetComponent<Rhythm_Box>().setDestination(rightDestinationPos[randPos]);
+            curNode.GetComponent<Rhythm_Box>().setRightTrue();
+            curNode.GetComponent<Rhythm_Box>().particle = particle;
+
+            if (randObj == 0)
+            {
+                curNode.GetComponent<Rhythm_Box>().setHorTrue();
+                curNode.GetComponent<Rhythm_Box>().setVerTrue();
+            }
+            else if (randObj == 1)
+            {
+                curNode.GetComponent<Rhythm_Box>().setHorTrue();
+                curNode.transform.rotation = Quaternion.Euler(0, 0, 90);
+            }
+            else if (randObj == 2)
+            {
+                curNode.GetComponent<Rhythm_Box>().setVerTrue();
+            }
+
             curNode.transform.parent = rightSpawnGroup.transform;
             rightNodeQueue.Enqueue(curNode);
         }
+    }
+
+    public void sendMissCoroutine(int pos)
+    {
+        mouseCursor.GetComponent<Rhythm_Mousecursor>().missCall(pos);
+    }
+
+    IEnumerator StartGame(float frame)
+    {
+        yield return new WaitForSeconds(frame);
+        allocateSpawnList();
+        StartGame();
     }
 
     IEnumerator makeNode(int frame, int nodePos)
@@ -197,12 +346,15 @@ public class RhythmGameManager : MonoBehaviour
 
     private void EndGaae()
     {
+        audioSource.Stop();
         ResultUI.SetActive(true);
         ResultUI.transform.GetChild(0).GetComponent<Text>().text = "Cool : " + coolNum;
         ResultUI.transform.GetChild(1).GetComponent<Text>().text = "Good : " + goodNum;
-        ResultUI.transform.GetChild(2).GetComponent<Text>().text = "Miss : " + missNum;
+        ResultUI.transform.GetChild(2).GetComponent<Text>().text = "Bad : " + badNum;
+        ResultUI.transform.GetChild(3).GetComponent<Text>().text = "Miss : " + missNum;
 
         Time.timeScale = 0;
+        isRhythmGameStart = false;
     }
 
 }
