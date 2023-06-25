@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Dead
+  - gun
+  - Enemy
   - BreakPoint
   - CrackPoint
   layers:
@@ -16,7 +18,7 @@ TagManager:
   - UI
   - Background
   - Ground
-  - 
+  - Player
   - 
   - 
   - 

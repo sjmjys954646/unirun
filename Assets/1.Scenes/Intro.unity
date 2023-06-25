@@ -792,7 +792,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: UNIRUN
+  m_text: UNIMINI
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 645cc40083d3ca845b3fc9db83ca174f, type: 2}
   m_sharedMaterial: {fileID: -266716310708851732, guid: 645cc40083d3ca845b3fc9db83ca174f, type: 2}
