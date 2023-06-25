@@ -40,18 +40,6 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    public void FirstTry()
-    {
-        if(GameManager.Instance.firstTry)
-        {
-            MoveScene(2);
-        }
-        else
-        {
-            MoveScene(1);
-        }
-    }
-
     public void MoveScene(int index)
     {
         if(index >= sceneName.Count)

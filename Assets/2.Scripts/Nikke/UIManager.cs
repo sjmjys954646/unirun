@@ -51,4 +51,9 @@ public class UIManager : MonoBehaviour {
     public void GameRestart() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void GameReturn()
+    {
+        SceneManager.LoadScene("GameSelect");
+    }
 }
