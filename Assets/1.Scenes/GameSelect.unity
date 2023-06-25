@@ -2102,6 +2102,7 @@ GameObject:
   - component: {fileID: 2185317105520993333}
   - component: {fileID: 2185317105520993328}
   - component: {fileID: 2185317105520993331}
+  - component: {fileID: 2185317105520993334}
   - component: {fileID: 2185317105520993330}
   m_Layer: 5
   m_Name: Button_info (2)
@@ -2132,6 +2133,19 @@ RectTransform:
   m_AnchoredPosition: {x: 150, y: -202}
   m_SizeDelta: {x: 130, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2185317105520993334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2185317105520993332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 116e1e06b712f5141bbf1b0337ad33f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoText: {fileID: 0}
 --- !u!114 &2185317106489254812
 MonoBehaviour:
   m_ObjectHideFlags: 0
